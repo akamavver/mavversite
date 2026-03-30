@@ -53,7 +53,7 @@ function createColumns() {
 /* === КОЛОНКИ === */
 function getColumnCount() {
     const w = window.innerWidth;
-    if (w < 500) return 2;
+    if (w < 380) return 2;
     if (w < 800) return 3;
     if (w < 1200) return 4;
     return 5;
@@ -70,7 +70,7 @@ function initAnimation() {
     offset = [];
 
     columns.forEach(() => {
-        speeds.push(0.2 + Math.random() * 0.4);
+        speeds.push(0.4 + Math.random() * 0.4);
         offset.push(0);
     });
 }
