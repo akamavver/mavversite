@@ -27,6 +27,7 @@ function shuffleArray(array) {
     return arr;
 }
 
+/* === СОЗДАНИЕ СЕТКИ === */
 function createColumns() {
     const columnCount = getColumnCount();
 
@@ -40,13 +41,9 @@ function createItems() {
     const cols = Math.floor(grid.clientWidth / 200); // примерная ширина фоток
     let colHeights = Array(cols).fill(grid.clientHeight); // стартовые позиции снизу
 
-        const usedInColumn = new Set(); // только для текущей колонки
-        const fullList = shuffleArray([...images, ...images]);
+        const fullList = shuffleArray([...images, ...images]); // перемешиваем массив
 
         fullList.forEach(src => {
-            if (usedInColumn.has(src)) return; // внутри колонки не повторяем
-            usedInColumn.add(src);
-
             const item = document.createElement("div");
             item.className = "item " + sizes[Math.floor(Math.random() * sizes.length)];
     shuffled.forEach((src) => {
@@ -74,7 +71,7 @@ function createItems() {
 /* === КОЛОНКИ === */
 function getColumnCount() {
     const w = window.innerWidth;
-    if (w < 500) return 3; // мобила = 3 колонки
+    if (w < 380) return 2;
     if (w < 800) return 3;
     if (w < 1200) return 4;
     return 5;
@@ -89,10 +86,9 @@ function initAnimation() {
     columns = document.querySelectorAll(".column");
     speeds = [];
     offset = [];
-    const isMobile = window.innerWidth < 800;
 
     columns.forEach(() => {
-        speeds.push((isMobile ? 0.6 : 0.2) + Math.random() * (isMobile ? 0.4 : 0.4));
+        speeds.push(0.4 + Math.random() * 0.4);
         offset.push(0);
 
         colHeights[colIndex] = y - rect.height - 10; // сдвигаем колонку вверх
