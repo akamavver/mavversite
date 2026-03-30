@@ -1,6 +1,7 @@
 const grid = document.getElementById('grid');
 const sizes = ["small", "medium", "large"];
 let images = [];
+let usedImages = new Set();
 
 /* === ЗАГРУЗКА JSON === */
 async function loadImages() {
@@ -27,14 +28,18 @@ function shuffleArray(array) {
 function createColumns() {
     const columnCount = getColumnCount();
     grid.innerHTML = "";
+    usedImages.clear();
 
     for (let i = 0; i < columnCount; i++) {
         const col = document.createElement("div");
         col.className = "column";
 
-        const fullList = shuffleArray([...images, ...images]); // перемешиваем массив
+        const fullList = shuffleArray([...images, ...images]);
 
         fullList.forEach(src => {
+            if (usedImages.has(src)) return; // пропускаем уже вставленные
+            usedImages.add(src);
+
             const item = document.createElement("div");
             item.className = "item " + sizes[Math.floor(Math.random() * sizes.length)];
 
@@ -53,7 +58,7 @@ function createColumns() {
 /* === КОЛОНКИ === */
 function getColumnCount() {
     const w = window.innerWidth;
-    if (w < 380) return 2;
+    if (w < 500) return 3; // мобила = 3 колонки
     if (w < 800) return 3;
     if (w < 1200) return 4;
     return 5;
@@ -68,9 +73,10 @@ function initAnimation() {
     columns = document.querySelectorAll(".column");
     speeds = [];
     offset = [];
+    const isMobile = window.innerWidth < 800;
 
     columns.forEach(() => {
-        speeds.push(0.4 + Math.random() * 0.4);
+        speeds.push((isMobile ? 0.6 : 0.2) + Math.random() * (isMobile ? 0.4 : 0.4));
         offset.push(0);
     });
 }

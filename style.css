@@ -92,6 +92,11 @@ body {
     color: white;
 }
 
+.bio-content h1,
+.bio-content p {
+    white-space: nowrap;
+}
+
 .center-text h1 {
     font-size: clamp(36px, 6vw, 80px);
     font-weight: 900;
