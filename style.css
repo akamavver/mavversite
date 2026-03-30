@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* GRID */
+.grid {
+    position: absolute;
+    width: 100%;
+    height: 200%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    transform: translateY(0);
+}
+
+/* COLUMN */
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* IMAGE */
+.item {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* RANDOM HEIGHTS */
+.item.small { height: 120px; }
+.item.medium { height: 180px; }
+.item.large { height: 260px; }
+
+/* OVERLAYS */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+}
+
+.fade-top,
+.fade-bottom {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    z-index: 2;
+}
+
+.fade-top {
+    top: 0;
+    background: linear-gradient(to bottom, #0a0a0a, transparent);
+}
+
+.fade-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, #0a0a0a, transparent);
+}
+
+/* TEXT */
+.center-text {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.center-text h1 {
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.center-text p {
+    font-size: clamp(16px, 2vw, 24px);
+    color: #ccc;
+}
+
+.center-text span {
+    font-weight: 900;
+    font-size: 1.3em;
+    color: white;
+}
+
+/* ADAPTIVE */
+@media (max-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
