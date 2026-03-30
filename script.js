@@ -24,21 +24,20 @@ function shuffleArray(array) {
     return arr;
 }
 
-/* === СОЗДАНИЕ СЕТКИ === */
 function createColumns() {
     const columnCount = getColumnCount();
     grid.innerHTML = "";
-    usedImages.clear();
 
     for (let i = 0; i < columnCount; i++) {
         const col = document.createElement("div");
         col.className = "column";
 
+        const usedInColumn = new Set(); // только для текущей колонки
         const fullList = shuffleArray([...images, ...images]);
 
         fullList.forEach(src => {
-            if (usedImages.has(src)) return; // пропускаем уже вставленные
-            usedImages.add(src);
+            if (usedInColumn.has(src)) return; // внутри колонки не повторяем
+            usedInColumn.add(src);
 
             const item = document.createElement("div");
             item.className = "item " + sizes[Math.floor(Math.random() * sizes.length)];
