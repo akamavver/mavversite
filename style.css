@@ -10,7 +10,6 @@ body {
     overflow: hidden;
 }
 
-/* HERO */
 .hero {
     position: relative;
     width: 100%;
@@ -18,27 +17,15 @@ body {
     overflow: hidden;
 }
 
-/* GRID */
 .grid {
-    position: absolute;
+    position: relative;
     width: 100%;
-    height: 200%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    transform: translateY(0);
+    height: 100%;
 }
 
-/* COLUMN */
-.column {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* IMAGE */
+/* ITEM */
 .item {
-    width: 100%;
+    position: absolute;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -50,10 +37,16 @@ body {
     display: block;
 }
 
-/* RANDOM HEIGHTS */
-.item.small { height: 120px; }
-.item.medium { height: 180px; }
-.item.large { height: 260px; }
+/* РАЗНЫЕ ПРОПОРЦИИ */
+.item.small-vert { width: 150px; height: 220px; }
+.item.medium-vert { width: 180px; height: 300px; }
+.item.large-vert { width: 220px; height: 380px; }
+
+.item.small-horiz { width: 220px; height: 140px; }
+.item.medium-horiz { width: 280px; height: 180px; }
+.item.large-horiz { width: 360px; height: 220px; }
+
+.item.square { width: 180px; height: 180px; }
 
 /* OVERLAYS */
 .overlay {
@@ -71,15 +64,8 @@ body {
     z-index: 2;
 }
 
-.fade-top {
-    top: 0;
-    background: linear-gradient(to bottom, #0a0a0a, transparent);
-}
-
-.fade-bottom {
-    bottom: 0;
-    background: linear-gradient(to top, #0a0a0a, transparent);
-}
+.fade-top { top: 0; background: linear-gradient(to bottom, #0a0a0a, transparent); }
+.fade-bottom { bottom: 0; background: linear-gradient(to top, #0a0a0a, transparent); }
 
 /* TEXT */
 .center-text {
@@ -90,11 +76,6 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     color: white;
-}
-
-.bio-content h1,
-.bio-content p {
-    white-space: nowrap;
 }
 
 .center-text h1 {
@@ -112,23 +93,4 @@ body {
     font-weight: 900;
     font-size: 1.3em;
     color: white;
-}
-
-/* ADAPTIVE */
-@media (max-width: 1200px) {
-    .grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (max-width: 800px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 500px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }

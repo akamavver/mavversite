@@ -1,36 +1,44 @@
 const grid = document.getElementById('grid');
-const sizes = ["small", "medium", "large"];
+const sizes = ["small-vert","medium-vert","large-vert","small-horiz","medium-horiz","large-horiz","square"];
 let images = [];
+
 let usedImages = new Set();
 
-/* === ЗАГРУЗКА JSON === */
+let items = [];
+let speed = 0.3; // базовая скорость
+
+
+/* ЗАГРУЗКА JSON */
 async function loadImages() {
     try {
         const res = await fetch("images.json");
         const data = await res.json();
         images = data.map(name => `Images/mavver/${name}`);
-    } catch (e) {
-        console.error("Ошибка загрузки images.json", e);
-    }
+    } catch(e){ console.error("Ошибка загрузки images.json", e); }
 }
 
-/* === ПЕРЕМЕШИВАНИЕ МАССИВА === */
+/* ПЕРЕМЕШИВАНИЕ */
 function shuffleArray(array) {
     const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+    for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
     }
     return arr;
 }
 
 function createColumns() {
     const columnCount = getColumnCount();
-    grid.innerHTML = "";
 
-    for (let i = 0; i < columnCount; i++) {
-        const col = document.createElement("div");
-        col.className = "column";
+/* СОЗДАНИЕ ЭЛЕМЕНТОВ */
+function createItems() {
+
+    grid.innerHTML = "";
+    items = [];
+
+    const shuffled = shuffleArray([...images]);
+    const cols = Math.floor(grid.clientWidth / 200); // примерная ширина фоток
+    let colHeights = Array(cols).fill(grid.clientHeight); // стартовые позиции снизу
 
         const usedInColumn = new Set(); // только для текущей колонки
         const fullList = shuffleArray([...images, ...images]);
@@ -41,18 +49,27 @@ function createColumns() {
 
             const item = document.createElement("div");
             item.className = "item " + sizes[Math.floor(Math.random() * sizes.length)];
+    shuffled.forEach((src) => {
+        const size = sizes[Math.floor(Math.random() * sizes.length)];
+        const div = document.createElement("div");
+        div.className = "item " + size;
 
-            const img = document.createElement("img");
-            img.src = src;
-            img.loading = "lazy";
+        const img = document.createElement("img");
+        img.src = src;
+        img.loading = "lazy";
+        div.appendChild(img);
+        grid.appendChild(div);
 
-            item.appendChild(img);
-            col.appendChild(item);
-        });
+        const rect = div.getBoundingClientRect();
+        const width = rect.width;
 
-        grid.appendChild(col);
-    }
-}
+        // найти колонку с минимальной высотой
+        let colIndex = colHeights.indexOf(Math.min(...colHeights));
+        const x = colIndex * (grid.clientWidth / cols);
+        const y = colHeights[colIndex];
+
+        div.style.left = x + "px";
+        div.style.top = y + "px";
 
 /* === КОЛОНКИ === */
 function getColumnCount() {
@@ -77,32 +94,33 @@ function initAnimation() {
     columns.forEach(() => {
         speeds.push((isMobile ? 0.6 : 0.2) + Math.random() * (isMobile ? 0.4 : 0.4));
         offset.push(0);
+
+        colHeights[colIndex] = y - rect.height - 10; // сдвигаем колонку вверх
+        items.push({el: div, x, y, width, height: rect.height, colIndex});
+
     });
 }
 
+/* АНИМАЦИЯ СНИЗУ ВВЕРХ */
 function animate() {
-    columns.forEach((col, i) => {
-        offset[i] += speeds[i];
-        if (offset[i] > col.scrollHeight / 2) offset[i] = 0;
-        col.style.transform = `translateY(-${offset[i]}px)`;
+    items.forEach(item => {
+        item.y += speed;
+        if(item.y > grid.clientHeight){
+            item.y = -item.height; // зацикливаем снизу
+        }
+        item.el.style.top = item.y + "px";
     });
     requestAnimationFrame(animate);
 }
 
-/* === INIT === */
-(async () => {
+/* INIT */
+(async()=>{
     await loadImages();
-    if (images.length === 0) {
-        console.warn("images.json пустой");
-        return;
-    }
-    createColumns();
-    initAnimation();
+    if(images.length===0){ console.warn("images.json пустой"); return; }
+    createItems();
     animate();
 })();
 
-/* === RESIZE === */
-window.addEventListener("resize", () => {
-    createColumns();
-    initAnimation();
+window.addEventListener("resize", ()=>{
+    createItems();
 });
